@@ -58,8 +58,12 @@ const questions = [
 const scoreCounter = document.getElementById('score');
 const timerCounter = document.getElementById('timer');
 const question = document.getElementById('question');
-const answerButtons = document.getElementById('answer');
+const answer1 = document.getElementById('answer1');
+const answer2 = document.getElementById('answer2');
+const answer3 = document.getElementById('answer3');
+const answer4 = document.getElementById('answer4');
 const parent = document.querySelector('section.qa');
+const allButtons = document.querySelectorAll('.btn');
 
 // Counters & other things ----------------
 
@@ -77,23 +81,17 @@ let timerRunning = false;
 let answerClicked = false;
 let questionIndex = 0;
 
-// NOTES TO SELF: -------------------
-// Set a timer, give player 60 seconds per question and when time is up
-// change question to next one
-// iterate through questions one at a time
-// sort clicked answers to correct or incorrect
-// increase score by one for all correct answers
-// manipulate the dom to add buttons and remove buttons from page dynamically
-// --------------------------------------
+// ----------------------------------------
 
-function timer() {
-  function run() {
+
+const timer = {
+  run: function() {
     timerRunning = true;
     clearInterval(interval);
-    interval = setInterval(decrement, 1000);
-  }
+    interval = setInterval(timer.decrement, 1000);
+  },
 
-  function decrement() {
+  decrement: function() {
     countdown--;
     timerCounter.innerHTML = "Timer: " + "00:" + countdown;
       if (countdown > 10) {
@@ -103,83 +101,102 @@ function timer() {
         timerCounter.style.color = 'tomato';
       }
       if (countdown === 0) {
-        stop();
+        timer.stopRunning();
       }
-  }
+  },
 
-  function stop() {
+  stopRunning: function() {
     timerRunning = false;
     clearInterval(interval);
   }
-
-  run();
 }
 
-function appendAnswers(i) {
-  for (let x = 0; x < 4; x++) {
-    let multipleChoice = questions[i].answer[x];
-    let button = document.createElement('button');
-    button.className = 'btn';
-    button.innerHTML = multipleChoice;
-    parent.appendChild(button);
-  }
+function initialize() {
+  answer1.style.display = 'none';
+  answer2.style.display = 'none';
+  answer3.style.display = 'none';
+  answer4.style.innerHTML = 'Start Game!';
 }
 
-function removeAnswers() {
-  let button = document.getElementsByTagName('button');
-  for(let i = 0; i < button.length; i++) {
-    parent.removeChild(button[i]);
-  }
-}
+// start trivia game ------------------------------
 
-// Make this an object during refactoring
+  const triviaGame = {
 
-function startGame() {
+    startGame: function() {
+      if (response === "Start Game!") {
+        triviaGame.askQuestion();
+      }
+    },
 
-}
+    attachChoices: function(i) {
+      answer1.style.display = '';
+      answer2.style.display = '';
+      answer3.style.display = '';
+      answer1.innerHTML = questions[i].answer[0];
+      answer2.innerHTML = questions[i].answer[1];
+      answer3.innerHTML = questions[i].answer[2];
+      answer4.innerHTML = questions[i].answer[3];
+    },
 
-function askQuestion() {
 
-    question.innerHTML = questions[questionIndex].question;
-    answer = questions[questionIndex].correctAnswer;
-    appendAnswers(questionIndex);
+    askQuestion: function() {
 
-    // Run timer
-      timer();
+      if (questionIndex === 10) {
+        triviaGame.endGame();
 
-    if (timerRunning) {
-      if ( answerClicked && response === answer) {
-        score++;
-        correctAnswers.push(answer);
-        removeAnswers();
-        questionIndex++;
-        askQuestion();
-        console.log('bug at 1');
-      } else if ( answerClicked && response !== answer) {
-        incorrectAnswers.push(response);
-        removeAnswers();
-        questionIndex++;
-        askQuestion();
-        console.log('bug at 2');
-      } else if ( !timerRunning && countdown === 0 ) {
-        unanswered.push(questions[questionIndex].question)
-        removeAnswers();
-        questionIndex++;
-        askQuestion();
-        console.log('bug at 3');
+      } else {
+
+        question.innerHTML = questions[questionIndex].question;
+        answer = questions[questionIndex].correctAnswer;
+        triviaGame.attachChoices(questionIndex);
+
+        // Run timer
+          timer.run();
+
+        if (timerRunning) {
+          if ( answerClicked && response === answer) {
+            score++;
+            correctAnswers.push(answer);
+            questionIndex++;
+            triviaGame.askQuestion();
+          } else if ( answerClicked && response !== answer) {
+            incorrectAnswers.push(response);
+            questionIndex++;
+            triviaGame.askQuestion();
+          } else if ( !timerRunning && countdown === 0 ) {
+            unanswered.push(questions[questionIndex].question)
+            questionIndex++;
+            triviaGame.askQuestion();
+          }
+        }
+      }
+
+    },
+
+    endGame: function() {
+      if (questionIndex === 10) {
+        // add results here
       }
     }
 
+  } //....../triviaGame end
+
+
+document.addEventListener('click', (e) => {
+  response = e.target.innerHTML;
+  if ( response === 'Start Game!') {
+    triviaGame.startGame();
   }
-
-
-function endGame() {
-
-}
-
-// calls go at bottom
-
-document.addEventListener('click', (event) => {
-  response = event.target.innerHTML;
-  answerClicked = true;
+  if ( questionIndex === 10) {
+    triviaGame.endGame();
+  }
 });
+
+// answer1.addEventListener('click', (e) => {
+//   response = e.target.innerHTML;
+//   if ( responce === ) {
+//
+//   }
+// });
+
+initialize();
