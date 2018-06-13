@@ -125,9 +125,9 @@ function appendAnswers(i) {
 }
 
 function removeAnswers() {
-  for (let i = 0; i < 4; i++) {
-    let button = document.getElementsByTagName('button')[i];
-    parent.removeChild(button);
+  let button = document.getElementsByTagName('button');
+  for(let i = 0; i < button.length; i++) {
+    parent.removeChild(button[i]);
   }
 }
 
@@ -152,14 +152,20 @@ function askQuestion() {
         correctAnswers.push(answer);
         removeAnswers();
         questionIndex++;
+        askQuestion();
+        console.log('bug at 1');
       } else if ( answerClicked && response !== answer) {
         incorrectAnswers.push(response);
         removeAnswers();
         questionIndex++;
+        askQuestion();
+        console.log('bug at 2');
       } else if ( !timerRunning && countdown === 0 ) {
         unanswered.push(questions[questionIndex].question)
         removeAnswers();
         questionIndex++;
+        askQuestion();
+        console.log('bug at 3');
       }
     }
 
