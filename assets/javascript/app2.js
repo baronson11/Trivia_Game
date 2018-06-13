@@ -73,10 +73,9 @@ let unanswered = [];
 let score = 0;
 let countdown = 60;
 let answer = '';
+let response = '';
 
 let interval;
-
-let response;
 let timerRunning = false;
 let answerClicked = false;
 let questionIndex = 0;
@@ -181,6 +180,7 @@ function initialize() {
 
   } //....../triviaGame end
 
+// Calls go here
 
 document.addEventListener('click', (e) => {
   response = e.target.innerHTML;
@@ -191,12 +191,5 @@ document.addEventListener('click', (e) => {
     triviaGame.endGame();
   }
 });
-
-// answer1.addEventListener('click', (e) => {
-//   response = e.target.innerHTML;
-//   if ( responce === ) {
-//
-//   }
-// });
 
 initialize();
