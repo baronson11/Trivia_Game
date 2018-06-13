@@ -70,4 +70,9 @@ body {
   font-size: 1em;
   border: none;
   width: 70%;
+  margin-top: 5px;
+}
+
+.btn:hover {
+  background-color: #ec2d2d;
 }
