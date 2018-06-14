@@ -58,10 +58,7 @@ const questions = [
 const scoreCounter = document.getElementById('score');
 const timerCounter = document.getElementById('timer');
 const question = document.getElementById('question');
-const answer1 = document.getElementById('answer1');
-const answer2 = document.getElementById('answer2');
-const answer3 = document.getElementById('answer3');
-const answer4 = document.getElementById('answer4');
+const parent = document.querySelector('section.qa');
 
 // Counters & other things ----------------
 
@@ -114,18 +111,6 @@ const timer = {
 // ..../end timer---------------------------
 // INITIALIZE: -----------------------------
 
-function initialize() {
-  answer1.style.display = 'none';
-  answer2.style.display = 'none';
-  answer3.style.display = 'none';
-  answer4.style.innerHTML = 'Start Game!';
-  score = 0;
-  countdown = 60;
-  correct = [];
-  incorrect = [];
-  questionIndex = 0;
-}
-
 function reset() {
   score = 0;
   countdown = 60;
@@ -142,21 +127,28 @@ function reset() {
   const triviaGame = {
 
     startGame: function() {
-      initialize();
-      if (response === "Start Game!") {
+      reset();
+      if (response === "Start Game!" || response === "..Play Again?") {
         this.askQuestion();
       }
     },
 
     attachChoices: function(i) {
-      answer1.style.display = '';
-      answer2.style.display = '';
-      answer3.style.display = '';
-      answer1.innerHTML = questions[i].answer[0];
-      answer2.innerHTML = questions[i].answer[1];
-      answer3.innerHTML = questions[i].answer[2];
-      answer4.innerHTML = questions[i].answer[3];
+      for (let x = 0; x < 4; x++) {
+        let multipleChoice = questions[i].answer[x];
+        let button = document.createElement('button');
+        button.className = 'btn';
+        button.innerHTML = multipleChoice;
+        parent.appendChild(button);
+      }
     },
+
+    removeChoices: function() {
+      for(let i = 0; i < 4; i++) {
+        document.removeChild(button);
+      }
+    },
+
 
     askQuestion: function() {
       if (questionIndex === questions.length) {
@@ -175,20 +167,20 @@ function reset() {
         console.log(response);
           if ( response === answer) {
             console.log('correct!');
-            // run a function to show a timed congrats screen
             score++;
             scoreCounter.innerHTML = `Score: ${score}/10`;
             correct.push(answer);
             answerClicked = false;
             questionIndex++;
+            this.removeChoices();
             this.askQuestion();
           } else if ( response !== answer) {
-            // run a function to show a timed you suck screen
             console.log('incorrect');
             incorrect.push(response);
             scoreCounter.innerHTML = `Score: ${score}/10`;
             answerClicked = false;
             questionIndex++;
+            this.removeChoices();
             this.askQuestion();
           }
       }
@@ -200,21 +192,14 @@ function reset() {
       }
       else if (questionIndex === questions.length) {
         timer.stopRunning();
-        answer1.style.display = 'none';
-        answer2.style.display = 'none';
-        answer3.style.display = 'none';
-        answer4.innerHTML = '..Play Again?';
-        if (score >= 7) {
-          question.innerHTML = `Results: <br> You scored ${score} out of 10! <br>
-          Nice! You answered ${correct.length} correctly <br>
-          and ${incorrect.length} incorrectly <br>
-          <img src="assets/img/trophy.svg.png">`;
-        } else {
-          question.innerHTML = `Results: <br> You scored ${score} out of 10.. <br>
-          Too bad...You answered ${correct.length} correctly <br>
-          and ${incorrect.length} incorrectly <br>
-          <img src="assets/img/gameover.jpg">`;
-        }
+        this.removeChoices();
+        let restartButton = document.createElement('button');
+        restartButton.className = 'btn';
+        restartButton.innerHTML = '..Play Again?';
+        question.appendChild(restartButton);
+        question.innerHTML = `Results: You scored ${score} out of 10! <br>`;
+        question.innerHTML += `You answered ${correct.length} correctly <br>`;
+        question.innerHTML += `and ${incorrect.length} incorrectly`;
       }
     }
 
@@ -238,20 +223,3 @@ document.addEventListener('click', (e) => {
     reset();
   }
 });
-
-
-
-// new code below ---------------------------------------
-
-// resultScreen: function() {
-//   if ( response === answer ) {
-//     setInterval(runthis, 3000);
-//       question.innerHTML = `Good Job!`;
-//       correctAnswer.className = `btn-correct`;
-//   }
-//   else if ( response !== answer ) {
-//     setInterval(runthis, 3000);
-//       question.innerHTML = `Wrong!`;
-//       correctAnswer.className = `btn-correct`;
-//   }
-// },
