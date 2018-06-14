@@ -22,13 +22,13 @@ const questions = [
     correctAnswer: "2077",
   },
   {
-    question: "In the Kingdom Hearts series, it is said that if you give this special fruit to someone your hearts will always be connected. What is the name of this fruit?",
+    question: "In the Kingdom Hearts series, if you give this special fruit to someone your hearts will always be connected. What is the name of this fruit?",
     answer: ["Kairi Fruit","Paopu Fruit","Golden Fruit","Stardust"],
     correctAnswer: "Paopu Fruit",
   },
   {
     question: "In the Harry Potter series, which house was Newt Scamander sorted into at Hogwarts?",
-    answer: ["Slitherin","Raverclaw","Hufflepuff","Gryfinndor"],
+    answer: ["Slitherin","Ravenclaw","Hufflepuff","Gryfinndor"],
     correctAnswer: "Hufflepuff",
   },
   {
@@ -130,6 +130,14 @@ function initialize() {
   questionIndex = 0;
 }
 
+function reset() {
+  score = 0;
+  countdown = 60;
+  questionIndex = 0;
+  scoreCounter.innerHTML = `Score: ${score}/10`;
+  triviaGame.askQuestion();
+}
+
 // ..../end initialize-----------------------------
 // TRIVIA GAME: -----------------------------------
 
@@ -138,7 +146,7 @@ function initialize() {
     startGame: function() {
       initialize();
       if (response === "Start Game!") {
-        triviaGame.askQuestion();
+        this.askQuestion();
       }
     },
 
@@ -154,12 +162,12 @@ function initialize() {
 
     askQuestion: function() {
       if (questionIndex === 10) {
-        triviaGame.endGame();
+        this.endGame();
       }
       else if (questionIndex < 10) {
         question.innerHTML = questions[questionIndex].question;
         answer = questions[questionIndex].correctAnswer;
-        triviaGame.attachChoices(questionIndex);
+        this.attachChoices(questionIndex);
         timer.run();
       }
     },
@@ -170,19 +178,18 @@ function initialize() {
           if ( response === answer) {
             console.log('correct!');
             score++;
-            scoreCounter.innerHTML = "Score: " + score + "/10";
+            scoreCounter.innerHTML = `Score: ${score}/10`;
             // correctAnswers.push('answer');
             answerClicked = false;
             questionIndex++;
-
-            triviaGame.askQuestion();
+            this.askQuestion();
           } else if ( response !== answer) {
             console.log('incorrect');
             // incorrectAnswers.push('response');
-            scoreCounter.innerHTML = "Score: " + score + "/10";
+            scoreCounter.innerHTML = `Score: ${score}/10`;
             answerClicked = false;
             questionIndex++;
-            triviaGame.askQuestion();
+            this.askQuestion();
           }
       }
     },
@@ -197,7 +204,7 @@ function initialize() {
         answer1.style.display = 'none';
         answer2.style.display = 'none';
         answer3.style.display = 'none';
-        answer4.style.display = 'none';
+        answer4.innerHTML = '..Play Again?';
         question.innerHTML = `Results: You scored ${score} out of 10!`;
       }
     }
@@ -218,14 +225,33 @@ document.addEventListener('click', (e) => {
     triviaGame.checkResponse(response);
     triviaGame.endGame();
   }
+  if (response === '..Play Again?') {
+    reset();
+  }
 });
 
 
-// code dump:
-// ----------------------------------------------------------------
-// else if (!answerClicked && !timerRunning ) {
-//   console.log('out of time!');
-//   // unanswered.push('questions[questionIndex].question');
-//   questionIndex++;
-//   triviaGame.askQuestion();
+// V1 Code ----------------------------------------
+
+// const scoreCounter = document.getElementById('score');
+// const timerCounter = document.getElementById('timer');
+// const question = document.getElementById('question');
+// const answerButtons = document.getElementById('answer');
+// const parent = document.querySelector('section.qa');
+//
+// function appendAnswers(i) {
+//   for (let x = 0; x < 4; x++) {
+//     let multipleChoice = questions[i].answer[x];
+//     let button = document.createElement('button');
+//     button.className = 'btn';
+//     button.innerHTML = multipleChoice;
+//     parent.appendChild(button);
+//   }
+// }
+//
+// function removeAnswers() {
+//   let button = document.getElementsByTagName('button');
+//   for(let i = 0; i < button.length; i++) {
+//     parent.removeChild(button[i]);
+//   }
 // }
