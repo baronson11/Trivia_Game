@@ -192,14 +192,19 @@ function reset() {
       }
       else if (questionIndex === questions.length) {
         timer.stopRunning();
-        this.removeChoices();
-        let restartButton = document.createElement('button');
-        restartButton.className = 'btn';
-        restartButton.innerHTML = '..Play Again?';
-        question.appendChild(restartButton);
-        question.innerHTML = `Results: You scored ${score} out of 10! <br>`;
-        question.innerHTML += `You answered ${correct.length} correctly <br>`;
-        question.innerHTML += `and ${incorrect.length} incorrectly`;
+        //clear dom of buttons and add button to play again
+        answer4.innerHTML = '..Play Again?';
+        if (score >= 7) {
+          question.innerHTML = `Results: <br> You scored ${score} out of 10! <br>
+          Nice! You answered ${correct.length} correctly <br>
+          and ${incorrect.length} incorrectly <br>
+          <img src="assets/img/trophy.svg.png">`;
+        } else {
+          question.innerHTML = `Results: <br> You scored ${score} out of 10.. <br>
+          Too bad...You answered ${correct.length} correctly <br>
+          and ${incorrect.length} incorrectly <br>
+          <img src="assets/img/gameover.jpg">`;
+        }
       }
     }
 
