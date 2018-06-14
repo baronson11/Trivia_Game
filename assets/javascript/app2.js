@@ -110,6 +110,7 @@ const timer = {
   stopRunning: function() {
     timerRunning = false;
     clearInterval(interval);
+    questionIndex++;
   }
 }
 
@@ -191,9 +192,13 @@ function initialize() {
         this.askQuestion();
       }
       else if (questionIndex === 10) {
-        // print results
         console.log('print results');
         timer.stopRunning();
+        answer1.style.display = 'none';
+        answer2.style.display = 'none';
+        answer3.style.display = 'none';
+        answer4.style.display = 'none';
+        question.innerHTML = `Results: You scored ${score} out of 10!`;
       }
     }
 
@@ -224,11 +229,3 @@ document.addEventListener('click', (e) => {
 //   questionIndex++;
 //   triviaGame.askQuestion();
 // }
-
-// hangman.startGame();
-//
-// document.addEventListener('keypress', (event) => {
-//   lettersGuessed = String.fromCharCode(event.which).toLowerCase();
-//   hangman.checkLetters(lettersGuessed);
-//   hangman.endGame();
-// });
