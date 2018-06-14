@@ -81,11 +81,13 @@ let answerClicked = false;
 let questionIndex = 0;
 
 // ----------------------------------------
-
+// TIMER: ---------------------------------
+// ----------------------------------------
 
 const timer = {
   run: function() {
     timerRunning = true;
+    countdown = 60;
     clearInterval(interval);
     interval = setInterval(timer.decrement, 1000);
   },
@@ -101,6 +103,7 @@ const timer = {
       }
       if (countdown === 0) {
         timer.stopRunning();
+        triviaGame.askQuestion();
       }
   },
 
@@ -110,18 +113,29 @@ const timer = {
   }
 }
 
+// ..../end timer---------------------------
+// INITIALIZE: -----------------------------
+
 function initialize() {
   answer1.style.display = 'none';
   answer2.style.display = 'none';
   answer3.style.display = 'none';
   answer4.style.innerHTML = 'Start Game!';
+  score = 0;
+  countdown = 60;
+  correct = [];
+  incorrect = [];
+  unanswered = [];
+  questionIndex = 0;
 }
 
-// start trivia game ------------------------------
+// ..../end initialize-----------------------------
+// TRIVIA GAME: -----------------------------------
 
   const triviaGame = {
 
     startGame: function() {
+      initialize();
       if (response === "Start Game!") {
         triviaGame.askQuestion();
       }
@@ -137,59 +151,84 @@ function initialize() {
       answer4.innerHTML = questions[i].answer[3];
     },
 
-
     askQuestion: function() {
-
       if (questionIndex === 10) {
         triviaGame.endGame();
-
-      } else {
-
+      }
+      else if (questionIndex < 10) {
         question.innerHTML = questions[questionIndex].question;
         answer = questions[questionIndex].correctAnswer;
         triviaGame.attachChoices(questionIndex);
+        timer.run();
+      }
+    },
 
-        // Run timer
-          timer.run();
-
-        if (timerRunning) {
-          if ( answerClicked && response === answer) {
+    checkResponse: function(response) {
+      if (answerClicked) {
+        console.log(response);
+          if ( response === answer) {
+            console.log('correct!');
             score++;
-            correctAnswers.push(answer);
+            scoreCounter.innerHTML = "Score: " + score + "/10";
+            // correctAnswers.push('answer');
+            answerClicked = false;
             questionIndex++;
+
             triviaGame.askQuestion();
-          } else if ( answerClicked && response !== answer) {
-            incorrectAnswers.push(response);
-            questionIndex++;
-            triviaGame.askQuestion();
-          } else if ( !timerRunning && countdown === 0 ) {
-            unanswered.push(questions[questionIndex].question)
+          } else if ( response !== answer) {
+            console.log('incorrect');
+            // incorrectAnswers.push('response');
+            scoreCounter.innerHTML = "Score: " + score + "/10";
+            answerClicked = false;
             questionIndex++;
             triviaGame.askQuestion();
           }
-        }
       }
-
     },
 
     endGame: function() {
-      if (questionIndex === 10) {
-        // add results here
+      if (questionIndex < 10) {
+        this.askQuestion();
+      }
+      else if (questionIndex === 10) {
+        // print results
+        console.log('print results');
+        timer.stopRunning();
       }
     }
 
-  } //....../triviaGame end
+  }
+//....../triviaGame end -------------------------------
 
-// Calls go here
+// Run game -------------------------------------------
+
+triviaGame.startGame();
 
 document.addEventListener('click', (e) => {
   response = e.target.innerHTML;
   if ( response === 'Start Game!') {
-    triviaGame.startGame();
-  }
-  if ( questionIndex === 10) {
+    triviaGame.askQuestion();
+  } else {
+    answerClicked = true;
+    triviaGame.checkResponse(response);
     triviaGame.endGame();
   }
 });
 
-initialize();
+
+// code dump:
+// ----------------------------------------------------------------
+// else if (!answerClicked && !timerRunning ) {
+//   console.log('out of time!');
+//   // unanswered.push('questions[questionIndex].question');
+//   questionIndex++;
+//   triviaGame.askQuestion();
+// }
+
+// hangman.startGame();
+//
+// document.addEventListener('keypress', (event) => {
+//   lettersGuessed = String.fromCharCode(event.which).toLowerCase();
+//   hangman.checkLetters(lettersGuessed);
+//   hangman.endGame();
+// });

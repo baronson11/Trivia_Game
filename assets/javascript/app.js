@@ -69,10 +69,10 @@ let unanswered = [];
 let score = 0;
 let countdown = 60;
 let answer = '';
+let response = '';
 
 let interval;
 
-let response;
 let timerRunning = false;
 let answerClicked = false;
 let questionIndex = 0;
