@@ -279,20 +279,3 @@ document.addEventListener('click', (e) => {
     reset();
   }
 });
-
-
-
-// new code below ---------------------------------------
-
-// resultScreen: function() {
-//   if ( response === answer ) {
-//     setInterval(runthis, 3000);
-//       question.innerHTML = `Good Job!`;
-//       correctAnswer.className = `btn-correct`;
-//   }
-//   else if ( response !== answer ) {
-//     setInterval(runthis, 3000);
-//       question.innerHTML = `Wrong!`;
-//       correctAnswer.className = `btn-correct`;
-//   }
-// },
