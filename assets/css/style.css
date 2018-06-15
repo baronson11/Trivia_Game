@@ -85,24 +85,15 @@ body {
   transition-duration: 0.5s;
 }
 
-.btn-correct {
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: inset 1px 1px 10px black;
-  background-color: #36881d;
-  color: #fff;
-  font-weight: bold;
-  font-family: 'Nanum Pen Script';
-  font-size: 1em;
-  border: none;
-  width: 70%;
-  margin-top: 5px;
-}
-
 /* picture styling -------------------*/
 
 img {
   height: 200px;
   width: 200px;
   margin-top: 10px;
+}
+
+img:hover {
+  transform: rotate(2turn);
+  transition: transform 0.7s;
 }
