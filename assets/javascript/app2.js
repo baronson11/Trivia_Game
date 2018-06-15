@@ -80,7 +80,9 @@ let questionIndex = 0;
 // GAMES SOUNDS -----------------------
 
 const music1 = new Audio('assets/sounds/thinking.mp3');
+music1.loop = true;
 const music2 = new Audio('assets/sounds/time!.mp3');
+music2.loop = true;
 
 const thinkingMusic ={
   playMethod: function() {
