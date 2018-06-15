@@ -59,6 +59,7 @@ const scoreCounter = document.getElementById('score');
 const timerCounter = document.getElementById('timer');
 const question = document.getElementById('question');
 const parent = document.querySelector('section.qa');
+const button = document.querySelectorAll('button');
 
 // Counters & other things ----------------
 
@@ -118,7 +119,9 @@ function reset() {
   correct = [];
   incorrect = [];
   scoreCounter.innerHTML = `Score: ${score}/10`;
-  triviaGame.askQuestion();
+  if ( response === "..Play Again?") {
+    triviaGame.askQuestion();
+  }
 }
 
 // ..../end initialize-----------------------------
@@ -128,7 +131,7 @@ function reset() {
 
     startGame: function() {
       reset();
-      if (response === "Start Game!" || response === "..Play Again?") {
+      if (response === "Start Game!") {
         this.askQuestion();
       }
     },

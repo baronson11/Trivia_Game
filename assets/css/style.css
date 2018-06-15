@@ -78,8 +78,11 @@ body {
 }
 
 .btn:hover {
-  background-color: #ec2d2d;
+  background-color: #257e36;
+  box-shadow: inset 1px 1px 12px black;
   cursor: pointer;
+  transition-property: background-color, box-shadow;
+  transition-duration: 0.5s;
 }
 
 .btn-correct {

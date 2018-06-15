@@ -175,6 +175,7 @@ function reset() {
         console.log(response);
           if ( response === answer) {
             console.log('correct!');
+            new Audio('assets/sounds/correct.mp3').play();
             // run a function to show a timed congrats screen
             score++;
             scoreCounter.innerHTML = `Score: ${score}/10`;
@@ -183,8 +184,9 @@ function reset() {
             questionIndex++;
             this.askQuestion();
           } else if ( response !== answer) {
-            // run a function to show a timed you suck screen
+            // run a function to show a timed wrong screen
             console.log('incorrect');
+            new Audio('assets/sounds/incorrect.mp3').play();
             incorrect.push(response);
             scoreCounter.innerHTML = `Score: ${score}/10`;
             answerClicked = false;
