@@ -77,6 +77,32 @@ let timerRunning = false;
 let answerClicked = false;
 let questionIndex = 0;
 
+// GAMES SOUNDS -----------------------
+
+const music1 = new Audio('assets/sounds/thinking.mp3');
+const music2 = new Audio('assets/sounds/time!.mp3');
+
+const thinkingMusic ={
+  playMethod: function() {
+    music1.play();
+  },
+
+  pauseMethod: function() {
+    music1.pause();
+  }
+}
+
+const timeAlmostUp = {
+  playMethod: function() {
+    music2.play();
+  },
+
+  pauseMethod: function() {
+    music2.pause();
+  }
+
+}
+
 // ----------------------------------------
 // TIMER: ---------------------------------
 // ----------------------------------------
@@ -95,10 +121,19 @@ const timer = {
       if (countdown > 10) {
         timerCounter.style.color = '#fff';
       }
+      if (countdown === 59) {
+        thinkingMusic.playMethod();
+      }
+      if (countdown === 15) {
+        thinkingMusic.pauseMethod();
+        timeAlmostUp.playMethod();
+        timerCounter.style.color = '#da7716';
+      }
       if (countdown <= 10) {
         timerCounter.style.color = 'tomato';
       }
       if (countdown === 0) {
+        timeAlmostUp.pauseMethod();
         timer.stopRunning();
         triviaGame.askQuestion();
       }
@@ -176,7 +211,8 @@ function reset() {
           if ( response === answer) {
             console.log('correct!');
             new Audio('assets/sounds/correct.mp3').play();
-            // run a function to show a timed congrats screen
+            thinkingMusic.pauseMethod();
+            timeAlmostUp.pauseMethod();
             score++;
             scoreCounter.innerHTML = `Score: ${score}/10`;
             correct.push(answer);
@@ -184,7 +220,8 @@ function reset() {
             questionIndex++;
             this.askQuestion();
           } else if ( response !== answer) {
-            // run a function to show a timed wrong screen
+            thinkingMusic.pauseMethod();
+            timeAlmostUp.pauseMethod();
             console.log('incorrect');
             new Audio('assets/sounds/incorrect.mp3').play();
             incorrect.push(response);
