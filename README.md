@@ -1,2 +1,2 @@
 # Trivia_Game
-HW - javascript assignment
+A trivia game about video games and nerd culture
